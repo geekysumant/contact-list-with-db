@@ -3,10 +3,15 @@ const express=require('express');
 const path=require('path');
 const port=8080;
 
+const db=require('./config/mongoose');
+const Contact=require('./models/contact');
+
+
 const app=express();
 app.set("view engine",'ejs');
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded());
+app.use(express.static("assets"));
 
 
 contactList=[
@@ -20,16 +25,35 @@ contactList=[
     }
 ];
 app.get('/',(req,res)=>{
-    return res.render("./home",{
-        title: "Contacts List",
-        contact_list:contactList
+    Contact.find({},(err,contacts)=>{
+        if(err){console.log(err);return }
+
+        return res.render("home",{
+            title:"Contacts List",
+            contact_list:contacts
+        });
     });
-    
 })
 
+app.get('/delete-contact/:id',(req,res)=>{
+    
+    const id=req.params.id;
+    Contact.findByIdAndDelete(id,(err)=>{
+        if(err){console.log(err);return }
+        return res.redirect('back');
+    });
+});
+
 app.post('/create-contact',(req,res)=>{
-    contactList.push(req.body);
-    res.redirect('back');
+    
+    Contact.create({
+        name:req.body.name,
+        phone:req.body.phone
+    }, (err,newContact)=>{
+        if(err) {console.log(err);return }
+        console.log(newContact);
+        return res.redirect('back');
+    })
 })
 
 

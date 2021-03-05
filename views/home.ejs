@@ -4,18 +4,32 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/f9e99e72a3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/style.css">
     <title>
         <%= title %>
     </title>
 </head>
 <body>
-    <div>
+    <h1 id="heading">
+        <i class="fas fa-address-book"></i>
+        My Contacts List
+    </h1>
+    
+    <div class="contact-list">
         <ul>
             <% for(let i of contact_list) { %>
-                <li>
+            <li class="contact">
+                <div class="details">
                     <p><%= i.name  %></p>
                     <p><%= i.phone  %></p>
-                </li>
+                </div>
+                <div>
+                    <a href="/delete-contact/<%=i._id %> ">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </div>
+            </li>
             <% } %>
         </ul>
     </div>
@@ -26,5 +40,8 @@
 
         <button type="submit">Add Contact</button>
     </form>
+    <script src="/css/js/script.js"></script>
+
+    
 </body>
 </html>
